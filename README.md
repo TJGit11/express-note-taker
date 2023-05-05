@@ -35,8 +35,7 @@ This app allows you to create & access helpful notes and also delete the ones yo
 
 
 ## Questions
-If you have any questions, you can find my github profile here:
-github.com/TJGit11 
+If you have any questions, you can find my github profile here
 or you can send me an email: thomasjjohnson9311@gmail.com
-
+github.com/TJGit11 
 
