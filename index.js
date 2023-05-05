@@ -1,10 +1,8 @@
 const express = require("express");
 const path = require("path");
 // Helper method for generating unique ids
-const uuid = require("./public/assets/js/uuid");
-const notesData = require("./db/db.json");
-const fs = require("fs");
-// const util = require("util");
+const uuid = require("uuid");
+const fs = require("fs").promises;
 
 const PORT = process.env.PORT || 3001;
 
@@ -24,36 +22,26 @@ app.get("/notes", (req, res) =>
 );
 
 app.get("/api/notes", (req, res) => {
-  res.json(`${req.method} request received`);
-  res.status(200).json(notesData);
+  fs.readFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
 });
 
 app.post("/api/notes", (req, res) => {
-  console.info(`${req.method} request received to add a new note`);
-  //pull data out form req.body
-  // const { id, title, text } = req.body
-  // const notesData = req.body.id;
-  req.body.id = uuid();
-  //push to the db array
+  req.body.id = uuid.v4();
   fs.readFile("./db/db.json")
     .then((data) => {
-      let note = JSON.parse(data);
-      note.push(req.body);
-      return note;
+      let newNotes = JSON.parse(data); //store parsed JSON into a new variable
+      newNotes.push(req.body); //push new notes into the req.body
+      return newNotes;
     })
     .then((notes) => {
-      // const noteString = JSON.stringify(newNote);
-
-      // write to file
-      fs.writeFile(`./db/db.json`, noteString, (err) =>
-        err
-          ? console.log(err)
-          : console
-              .log(`Review for ${newNote.id} has been written to JSON file`)
-              .then(() => res.json(notes))
-      );
-    });
+      return fs.writeFile(`./db/db.json`, JSON.stringify(notes)); //object Object without stringify
+    })
+    .then(() => res.json(req.body));
 });
+// .catch((err) => {
+//   console.error(err);
+//   res.status(500).send("Server error");
+// });
 
 // app.delete("/api/notes", (req, res) => {
 //   //pull from url

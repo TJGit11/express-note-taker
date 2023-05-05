@@ -1,7 +1,1 @@
-[
-    {
-        "id": 1,
-        "title":"Test Title",
-        "text":"Test text"
-    }
-]
+[{"id":1,"title":"Test Title","text":"Test text"},{"title":"New nore","text":"losldf","id":"ec4a3686-5b12-488a-bc24-ead117bef85e"},{"title":"Test Note Number 2","text":"Test note","id":"eb13dd26-7e9f-4796-aee9-82ecb8aa313e"},{"title":"Plus button?","text":"Save","id":"74abffb1-3e15-42ff-87de-4b08a985b05c"},{"title":"Test run again","text":"please","id":"227d729b-3c12-4364-955c-f87b970396dc"}]
