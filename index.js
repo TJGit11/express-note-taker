@@ -38,16 +38,33 @@ app.post("/api/notes", (req, res) => {
     })
     .then(() => res.json(req.body));
 });
-// .catch((err) => {
-//   console.error(err);
-//   res.status(500).send("Server error");
-// });
 
 // app.delete("/api/notes", (req, res) => {
 //   //pull from url
 //   // remove item from array
 //   // write to file
 // });
+
+//Delete button
+app.delete("/api/notes/:id", (req, res) => {
+  const id = req.params.id;
+  fs.readFile("./db/db.json")
+    .then((data) => {
+      let notes = JSON.parse(data);
+      let index = notes.findIndex((note) => note.id === id);
+      if (index !== -1) {
+        notes.splice(index, 1);
+        return fs.writeFile(`./db/db.json`, JSON.stringify(notes));
+      } else {
+        throw new Error("Note not found");
+      }
+    })
+    .then(() => res.status(204).send())
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Server error");
+    });
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
