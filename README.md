@@ -1,5 +1,3 @@
-# express-note-taker-carnival
-
 # Express Note Taker
 Express Note Taker
 
