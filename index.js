@@ -1,8 +1,8 @@
 const express = require("express");
 const path = require("path");
 // Helper method for generating unique ids
-// const uuid = require("uuid");
-// const notes = require("./db/db.json");
+const uuid = require("./public/assets/js/uuid");
+const notesData = require("./db/db.json");
 const fs = require("fs");
 // const util = require("util");
 
@@ -25,32 +25,35 @@ app.get("/notes", (req, res) =>
 
 app.get("/api/notes", (req, res) => {
   res.json(`${req.method} request received`);
-  fs.readFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
+  res.status(200).json(notesData);
 });
 
-// app.post("/api/notes", (req, res) => {
-//   console.info(`${req.method} request received to add a new note`);
-//   //pull data out form req.body
-//   // const { id, title, text } = req.body
-//   const notesData = req.body;
-//   //push to the db array
-//   if (notesData) {
-//     const newNote = {
-//       id: uuidv4(),
-//       title,
-//       text,
-//     };
+app.post("/api/notes", (req, res) => {
+  console.info(`${req.method} request received to add a new note`);
+  //pull data out form req.body
+  // const { id, title, text } = req.body
+  // const notesData = req.body.id;
+  req.body.id = uuid();
+  //push to the db array
+  fs.readFile("./db/db.json")
+    .then((data) => {
+      let note = JSON.parse(data);
+      note.push(req.body);
+      return note;
+    })
+    .then((notes) => {
+      // const noteString = JSON.stringify(newNote);
 
-//     const noteString = JSON.stringify(newNote);
-
-//     // write to file
-//     fs.writeFile(`./db/${newNote}.json`, noteString, (err) =>
-//       err
-//         ? console.log(err)
-//         : console.log(`Review for ${newNote.id} has been written to JSON file`)
-//     );
-//   }
-// });
+      // write to file
+      fs.writeFile(`./db/db.json`, noteString, (err) =>
+        err
+          ? console.log(err)
+          : console
+              .log(`Review for ${newNote.id} has been written to JSON file`)
+              .then(() => res.json(notes))
+      );
+    });
+});
 
 // app.delete("/api/notes", (req, res) => {
 //   //pull from url
